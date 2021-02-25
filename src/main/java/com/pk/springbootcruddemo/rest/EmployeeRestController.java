@@ -57,4 +57,27 @@ public class EmployeeRestController {
 
         return "Deleted Employee with id " + id;
     }
+
+    @PatchMapping("/employees/{id}")
+    public Employee partialUpdate(@PathVariable int id, @RequestBody Employee employee) {
+        Employee emp = employeeService.findById(id);
+
+        if (emp == null) {
+            throw  new RuntimeException("Employee not found with id " + id);
+        }
+
+        if (employee.getFirstName() != null) {
+            emp.setFirstName(employee.getFirstName());
+        }
+        if (employee.getLastName() != null) {
+            emp.setLastName(employee.getLastName());
+        }
+        if (employee.getEmail() != null) {
+            emp.setEmail(employee.getEmail());
+        }
+
+        employeeService.save(emp);
+
+        return emp;
+    }
 }
